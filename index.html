@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composição 3D - p5.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let tempo = 0;
+        let velocidadeRotacao = 0.008;
+        let pulsacaoSol = 0;
+
+        function setup() {
+            createCanvas(800, 600, WEBGL);
+        }
+
+        function draw() {
+            background(5, 5, 15);
+            
+            // Iluminação do sistema solar
+            ambientLight(30);
+            pointLight(255, 255, 150, 0, 0, 0); // Luz do Sol
+            directionalLight(80, 80, 120, -1, 0.5, -0.5);
+            
+            // Controle da câmera com mouse
+            rotateX(map(mouseY, 0, height, -PI/4, PI/4));
+            rotateY(map(mouseX, 0, width, -PI/2, PI/2));
+            
+            tempo += velocidadeRotacao;
+            pulsacaoSol += 0.05;
+            
+            // Sol central - vibrante e pulsante
+            push();
+            rotateY(tempo * 1.5);
+            let tamSol = 30 + sin(pulsacaoSol) * 3; // Pulsação
+
+            push();
+            ambientMaterial(255, 120, 0, 120);
+            sphere(tamSol + 12);
+            pop();
+            
+            push();
+            ambientMaterial(255, 180, 20, 180);
+            sphere(tamSol + 6);
+            pop();
+            
+            push();
+            ambientMaterial(255, 220, 50);
+            sphere(tamSol + 3);
+            pop();
+            
+            // Sol
+            ambientMaterial(255, 240, 80); 
+            sphere(tamSol);
+            pop();
+            
+            // Mercúrio
+            push();
+            rotateY(tempo * 4.15);
+            translate(70, 0, 0);
+            rotateY(tempo * 6);
+            ambientMaterial(140, 140, 140);
+            sphere(4);
+            pop();
+            
+            // Vênus
+            push();
+            rotateY(tempo * 3.24);
+            translate(95, 0, 0);
+            rotateY(tempo * 4);
+            ambientMaterial(255, 180, 80); // Cor mais visível para Vênus
+            sphere(6);
+            pop();
+            
+            // Terra com atmosfera
+            push();
+            rotateY(tempo * 2);
+            translate(130, 0, 0);
+            
+            // Atmosfera da Terra
+            push();
+            ambientMaterial(100, 150, 255, 100);
+            sphere(10);
+            pop();
+            
+            // Terra
+            push();
+            rotateY(tempo * 8);
+            ambientMaterial(50, 120, 200);
+            sphere(8);
+            pop();
+            
+            // Lua da Terra
+            push();
+            rotateY(tempo * 12);
+            translate(18, 0, 0);
+            ambientMaterial(180, 180, 160);
+            sphere(2.5);
+            pop();
+            
+            pop();
+            
+            // Marte
+            push();
+            rotateY(tempo * 1.88);
+            translate(170, 0, 0);
+            rotateY(tempo * 7);
+            ambientMaterial(200, 80, 50);
+            sphere(5);
+            pop();
+            
+            // Júpiter
+            push();
+            rotateY(tempo * 0.84);
+            translate(220, 0, 0);
+            rotateY(tempo * 3);
+            ambientMaterial(200, 150, 100); // Mudança para ambientMaterial
+            sphere(20);
+            
+            // Luas de Júpiter (principais) - melhoradas
+            for(let i = 0; i < 4; i++) {
+                push();
+                rotateY(tempo * (8 + i * 2) + i * PI/2);
+                translate(28 + i * 4, 0, 0); // Aumentada distância
+                ambientMaterial(200, 200, 180); // Cor mais visível
+                sphere(2); // Tamanho aumentado
+                pop();
+            }
+            pop();
+            
+            // Saturno com anéis melhorados
+            push();
+            rotateY(tempo * 0.64);
+            translate(280, 0, 0);
+            
+            // Planeta Saturno
+            push();
+            rotateY(tempo * 2.5);
+            ambientMaterial(220, 190, 120);
+            sphere(16);
+            pop();
+            
+            // Sistema de anéis de Saturno
+            push();
+            rotateX(PI/2 + 0.2);
+            rotateZ(tempo * 0.5);
+            
+            // Múltiplos anéis - usando ambientMaterial
+            ambientMaterial(180, 180, 160);
+            torus(28, 1.5);
+            
+            ambientMaterial(160, 160, 140);
+            torus(32, 1);
+            
+            ambientMaterial(140, 140, 120);
+            torus(35, 0.8);
+            pop();
+            
+            pop();
+            
+            // Urano
+            push();
+            rotateY(tempo * 0.46);
+            translate(340, 0, 0);
+            rotateY(tempo * 4);
+            ambientMaterial(100, 200, 220);
+            sphere(12);
+
+            push();
+            rotateY(PI/2);
+            ambientMaterial(80, 100, 120, 100);
+            torus(16, 0.3);
+            ambientMaterial(70, 90, 110, 80);
+            torus(17, 0.2);
+            pop();
+            
+            pop();
+            
+            // Netuno
+            push();
+            rotateY(tempo * 0.35);
+            translate(380, 0, 0);
+            rotateY(tempo * 5);
+            ambientMaterial(50, 80, 255); // Azul mais intenso
+            sphere(11);
+            
+            // Tritão (lua principal de Netuno)
+            push();
+            rotateY(tempo * 15);
+            translate(18, 0, 0);
+            ambientMaterial(160, 160, 180);
+            sphere(1.8);
+            pop();
+            
+            pop();
+            
+            // Órbitas mais detalhadas
+            desenharOrbitas();
+        }
+        
+        function desenharOrbitas() {
+            stroke(40, 40, 80, 150);
+            strokeWeight(1);
+            noFill();
+            
+            push();
+            rotateX(PI/2);
+            // Órbitas de todos os planetas
+            ellipse(0, 0, 140, 140); // Mercúrio
+            ellipse(0, 0, 190, 190); // Vênus
+            ellipse(0, 0, 260, 260); // Terra
+            ellipse(0, 0, 340, 340); // Marte
+            ellipse(0, 0, 440, 440); // Júpiter
+            ellipse(0, 0, 560, 560); // Saturno
+            ellipse(0, 0, 680, 680); // Urano
+            ellipse(0, 0, 760, 760); // Netuno
+            pop();
+            
+            noStroke();
+        }
+        
+        // Interação: acelerar/desacelerar com clique
+        function mousePressed() {
+            velocidadeRotacao = velocidadeRotacao > 0.005 ? 0.002 : 0.015;
+        }
+    </script>
+</body>
+</html>
